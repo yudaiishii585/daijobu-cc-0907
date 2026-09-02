@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ランチタイムに学ぶ、Claude Codeの「スキル」入門｜2026.9.7（月）12:00 オンライン・無料</title>
+<meta name="description" content="【非エンジニア経営者向け】Claude Codeの「スキル」とは何かを、実際に動いている実物の実演で60分で理解する無料ウェビナー。2026年9月7日（月）12:00–13:00、Zoom、見るだけOK。申込特典は当日お見せするスキルの実物。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="【非エンジニア経営者向け】ランチタイムに学ぶ、Claude Codeの「スキル」入門">
+<meta property="og:description" content="2026年9月7日（月）12:00–13:00 オンライン（Zoom）・無料・見るだけOK。申込特典は、当日お見せするスキルの実物。">
+<meta property="og:image" content="https://yudaiishii585.github.io/daijobu-cc-0907/assets/og.jpg">
+<meta property="og:url" content="https://yudaiishii585.github.io/daijobu-cc-0907/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@AI_yudai">
+<meta name="theme-color" content="#01132A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2301132A'/%3E%3Cpath d='M18 44 L46 20' stroke='%23EF6731' stroke-width='10' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+/* ---------- tokens ---------- */
+:root{
+  --navy:#01132A; --navy-2:#0B2140; --orange:#EF6731; --orange-2:#D9541F; --sky:#72C6FE;
+  --ink:#0E1420; --ink-2:#4A5262; --ink-3:#7C8494;
+  --paper:#FBFAF8; --paper-2:#F3F1EE; --line:#E6E2DE; --grid:#ECE8E4;
+  --white:#fff;
+  --r-s:12px; --r-m:20px; --r-l:28px;
+  --max:1080px;
+  /* Apple-ish critically damped curves: mirror pair for enter/exit */
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-in:cubic-bezier(.64,0,.78,0);
+  --shadow-1:0 1px 2px rgba(1,19,42,.06),0 8px 24px -12px rgba(1,19,42,.18);
+  --shadow-2:0 2px 6px rgba(1,19,42,.06),0 24px 48px -20px rgba(1,19,42,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  font-family:system-ui,-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP","Segoe UI",sans-serif;
+  font-size:1.0625rem; line-height:1.8; color:var(--ink); background:var(--paper);
+  font-feature-settings:"palt";
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+::selection{background:rgba(114,198,254,.45)}
+.wrap{width:min(var(--max),calc(100% - 2.5rem));margin-inline:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- typography ---------- */
+h1,h2,h3{font-weight:800;line-height:1.25;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(1.9rem,1.1rem + 3.6vw,3.4rem);line-height:1.18;letter-spacing:-.02em}
+h2{font-size:clamp(1.5rem,1.05rem + 1.8vw,2.25rem);letter-spacing:-.015em}
+h3{font-size:1.2rem;letter-spacing:-.005em}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:700;letter-spacing:.06em;color:var(--orange);text-transform:uppercase}
+.eyebrow::before{content:"";width:1.4rem;height:2px;background:currentColor;border-radius:2px}
+.lead{font-size:1.125rem;color:var(--ink-2)}
+.small{font-size:.9rem;color:var(--ink-3)}
+p+p{margin-top:1em}
+
+/* ---------- nav (translucent material) ---------- */
+.nav{position:sticky;top:0;z-index:50;
+  background:rgba(251,250,248,.72);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
+}
+.nav::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;
+  background:linear-gradient(rgba(1,19,42,.06),rgba(1,19,42,0));pointer-events:none;
+  opacity:0;transition:opacity .25s var(--ease-out)}
+.nav.is-stuck::after{opacity:1}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:64px}
+.nav .brand{display:flex;align-items:center;gap:.75rem;text-decoration:none}
+.nav .brand img{height:20px;width:auto}
+.nav .brand span{font-size:.82rem;font-weight:700;color:var(--ink-2);letter-spacing:.02em}
+.nav .date{font-size:.9rem;font-weight:700;color:var(--ink-2);white-space:nowrap}
+@media (max-width:640px){.nav .date,.nav .brand span{display:none}}
+
+/* ---------- buttons: feedback on pointer-down ---------- */
+.btn{--bg:var(--orange);--fg:#fff;
+  display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+  min-height:52px;padding:0 1.5rem;border-radius:999px;
+  background:var(--bg);color:var(--fg);font-weight:800;font-size:1.02rem;letter-spacing:.01em;
+  text-decoration:none;border:0;cursor:pointer;
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 8px 20px -8px rgba(239,103,49,.55);
+  transform:translateZ(0) scale(var(--s,1));
+  transition:transform .32s var(--ease-out),box-shadow .32s var(--ease-out),background .2s;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;
+}
+.btn:hover{--s:1.02;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 14px 28px -10px rgba(239,103,49,.6)}
+.btn.is-pressed,.btn:active{--s:.965;transition-duration:.08s;background:var(--orange-2)}
+.btn:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.btn.sm{min-height:42px;padding:0 1.1rem;font-size:.92rem}
+.btn.ghost{--bg:transparent;--fg:var(--navy);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn.ghost:hover{box-shadow:inset 0 0 0 1.5px var(--ink-3)}
+.btn.ghost.is-pressed,.btn.ghost:active{background:var(--paper-2)}
+.btn.dark{--bg:var(--navy);box-shadow:0 8px 20px -8px rgba(1,19,42,.5)}
+.btn.dark.is-pressed,.btn.dark:active{background:var(--navy-2)}
+.btn svg{width:1.1em;height:1.1em;flex:none}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;padding:clamp(3rem,6vw,6rem) 0 clamp(3rem,6vw,5rem);
+  background:
+    radial-gradient(60rem 30rem at 85% -10%,rgba(114,198,254,.28),transparent 60%),
+    radial-gradient(40rem 24rem at -10% 110%,rgba(239,103,49,.12),transparent 60%),
+    var(--paper);
+}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(to right,var(--grid) 1px,transparent 1px),linear-gradient(to bottom,var(--grid) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(70% 70% at 50% 40%,#000 30%,transparent 100%);
+  mask-image:radial-gradient(70% 70% at 50% 40%,#000 30%,transparent 100%);
+  opacity:.9}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(2rem,5vw,4rem);align-items:center}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}}
+.hero .tag{display:inline-flex;align-items:center;gap:.5rem;background:var(--navy);color:#fff;font-weight:800;font-size:.86rem;letter-spacing:.04em;padding:.4rem .85rem;border-radius:8px;transform:skewX(-8deg)}
+.hero .tag span{display:inline-block;transform:skewX(8deg)}
+.hero h1{margin:1.1rem 0 .3rem}
+.hero h1 .sub{display:block;font-size:.5em;font-weight:700;color:var(--ink-2);letter-spacing:0;margin-bottom:.35em}
+.hero h1 .hl{color:var(--orange);white-space:nowrap}
+.hero .hook{display:inline-block;margin-top:.9rem;font-weight:800;font-size:1.05rem;color:var(--navy);
+  background:linear-gradient(transparent 60%,rgba(114,198,254,.55) 60%)}
+.hero .lead{margin-top:1.25rem;max-width:34em}
+.hero .cta{display:flex;flex-wrap:wrap;align-items:center;gap:.9rem 1rem;margin-top:1.75rem}
+.hero .cta .small{flex-basis:100%}
+
+/* info card (floats) */
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r-l);box-shadow:var(--shadow-2)}
+.infocard{padding:1.5rem 1.6rem;position:relative;will-change:transform}
+.infocard .dt{display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;color:var(--navy);font-weight:900;letter-spacing:-.02em;line-height:1}
+.infocard .dt .y{font-size:1.2rem;color:var(--ink-3);letter-spacing:0}
+.infocard .dt .d{font-size:clamp(3rem,2rem + 4vw,4.4rem)}
+.infocard .dt .w{font-size:1rem;border:2px solid var(--navy);border-radius:6px;padding:.1rem .45rem;letter-spacing:0;position:relative;top:-.4em}
+.infocard .dt .t{font-size:1.35rem;letter-spacing:0;margin-left:.3rem}
+.infocard ul{list-style:none;margin-top:1.1rem;display:grid;gap:.55rem}
+.infocard li{display:flex;align-items:center;gap:.7rem;font-weight:700;color:var(--ink-2);font-size:.98rem}
+.infocard li i{flex:none;width:2rem;height:2rem;border-radius:9px;background:var(--paper-2);display:grid;place-items:center;color:var(--navy)}
+.infocard li i svg{width:1.05rem;height:1.05rem}
+.infocard .gift{margin-top:1.2rem;padding:.9rem 1rem;border-radius:14px;background:var(--orange);color:#fff;display:flex;gap:.8rem;align-items:center}
+.infocard .gift b{flex:none;background:#fff;color:var(--orange);font-size:.78rem;letter-spacing:.2em;padding:.25rem .5rem .25rem .7rem;border-radius:5px}
+.infocard .gift span{font-weight:800;line-height:1.35;letter-spacing:-.01em}
+.infocard .dot{position:absolute;right:-10px;top:-10px;width:22px;height:22px;border-radius:50%;background:var(--sky);box-shadow:0 0 0 6px rgba(114,198,254,.25)}
+
+/* ---------- sections ---------- */
+section{padding:clamp(3.2rem,7vw,6rem) 0}
+section+section{border-top:1px solid var(--line)}
+.sec-head{max-width:40em;margin-bottom:clamp(1.6rem,3vw,2.4rem)}
+.sec-head h2{margin-top:.55rem}
+.sec-head .lead{margin-top:.8rem}
+
+.grid{display:grid;gap:1rem}
+.grid.c2{grid-template-columns:repeat(2,1fr)}
+.grid.c3{grid-template-columns:repeat(3,1fr)}
+.grid.c4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:900px){.grid.c4{grid-template-columns:repeat(2,1fr)}.grid.c3{grid-template-columns:1fr}}
+@media (max-width:560px){.grid.c2,.grid.c4{grid-template-columns:1fr}}
+
+.tile{background:var(--white);border:1px solid var(--line);border-radius:var(--r-m);padding:1.35rem 1.4rem;box-shadow:var(--shadow-1)}
+.tile .n{font-size:.78rem;font-weight:800;letter-spacing:.1em;color:var(--orange)}
+.tile p{margin-top:.5rem;font-weight:700;line-height:1.6;color:var(--ink);text-wrap:pretty}
+.tile.q p::before{content:"“";color:var(--sky);font-size:1.6em;line-height:0;vertical-align:-.25em;margin-right:.1em}
+
+/* ---------- show / skill file ---------- */
+.show{background:var(--navy);color:#fff;position:relative;overflow:hidden}
+.show::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(50rem 30rem at 100% 0%,rgba(114,198,254,.22),transparent 60%),radial-gradient(40rem 26rem at 0% 100%,rgba(239,103,49,.18),transparent 60%)}
+.show .wrap{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:center}
+@media (max-width:860px){.show .wrap{grid-template-columns:1fr}}
+.show .eyebrow{color:var(--sky)}
+.show .lead{color:rgba(255,255,255,.78)}
+.show h2{color:#fff}
+.show .gifthead{display:inline-flex;align-items:center;gap:.6rem;margin-top:2.2rem;padding:.5rem .9rem .5rem .5rem;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-weight:800;font-size:.95rem}
+.show .gifthead b{background:var(--orange);color:#fff;font-size:.74rem;letter-spacing:.2em;padding:.3rem .5rem .3rem .7rem;border-radius:999px}
+.show h3{margin-top:.9rem;font-size:1.35rem;color:#fff}
+.show .gift-p{margin-top:.8rem;color:rgba(255,255,255,.82)}
+.show .punch{margin-top:1.1rem;padding-left:1rem;border-left:3px solid var(--orange);font-weight:700;color:#fff}
+
+/* SKILL.md file card — follows the pointer with a spring (JS), returns critically damped */
+.filewrap{perspective:1200px;display:grid;place-items:center}
+.file{width:min(100%,420px);aspect-ratio:4/4.6;border-radius:18px;background:#fff;color:var(--ink);
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.35);
+  transform-style:preserve-3d;will-change:transform;position:relative;overflow:hidden;touch-action:pan-y}
+.file .bar{display:flex;align-items:center;gap:.5rem;padding:.7rem .9rem;background:var(--paper-2);border-bottom:1px solid var(--line);font-size:.82rem;font-weight:700;color:var(--ink-2);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.file .bar i{width:10px;height:10px;border-radius:50%;background:#E5E1DC}
+.file .bar i:nth-child(1){background:#FF5F57}.file .bar i:nth-child(2){background:#FEBC2E}.file .bar i:nth-child(3){background:#28C840}
+.file .bar span{margin-left:.4rem}
+.file .body{padding:1.1rem 1.2rem;display:grid;gap:.62rem}
+.file .ln{height:.62rem;border-radius:4px;background:var(--paper-2);width:var(--w,80%)}
+.file .ln.k{background:rgba(239,103,49,.32);width:var(--w,30%)}
+.file .ln.h{background:rgba(1,19,42,.18);width:var(--w,55%)}
+.file .ln.gap{height:.3rem;background:transparent}
+.file .foot{position:absolute;left:0;right:0;bottom:0;padding:.75rem 1.2rem;background:linear-gradient(transparent,#fff 40%);font-size:.82rem;font-weight:700;color:var(--ink-2);display:flex;justify-content:space-between}
+.file .foot b{color:var(--orange)}
+.file .sheen{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(var(--sx,-120%));opacity:.7}
+
+/* ---------- outcomes ---------- */
+.out .tile{display:flex;gap:1rem;align-items:flex-start;padding:1.5rem}
+.out .tile .ck{flex:none;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center}
+.out .tile .ck svg{width:1.1rem;height:1.1rem}
+.out .tile p{margin-top:.15rem;font-size:1.02rem}
+
+/* ---------- reassure ---------- */
+.reassure .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:start}
+@media (max-width:860px){.reassure .wrap{grid-template-columns:1fr}}
+.checks{list-style:none;display:grid;gap:.75rem}
+.checks li{display:flex;gap:.8rem;align-items:flex-start;padding:.95rem 1.1rem;background:var(--white);border:1px solid var(--line);border-radius:14px;font-weight:700}
+.checks li i{flex:none;width:1.5rem;height:1.5rem;border-radius:50%;background:rgba(114,198,254,.35);color:var(--navy);display:grid;place-items:center;margin-top:.15rem}
+.checks li i svg{width:.9rem;height:.9rem}
+.checks li span{color:var(--ink)}
+.checks li em{display:block;font-style:normal;font-weight:500;color:var(--ink-2);font-size:.92rem;margin-top:.15rem}
+
+/* ---------- timeline ---------- */
+.tl{list-style:none;display:grid;grid-template-columns:1fr 2fr 1fr;gap:.6rem;margin-top:1.5rem}
+@media (max-width:640px){.tl{grid-template-columns:1fr}}
+.tl li{position:relative;background:var(--white);border:1px solid var(--line);border-radius:var(--r-m);padding:1.2rem 1.25rem 1.3rem;overflow:hidden}
+.tl li::before{content:"";position:absolute;left:0;top:0;right:0;height:5px;background:var(--navy);transform-origin:left;transform:scaleX(0);transition:transform 1.1s var(--ease-out)}
+.tl li:nth-child(2)::before{background:var(--orange)}
+.tl li:nth-child(3)::before{background:var(--sky)}
+.in-view .tl li::before{transform:scaleX(1)}
+.in-view .tl li:nth-child(2)::before{transition-delay:.25s}.in-view .tl li:nth-child(3)::before{transition-delay:.55s}
+.tl .tm{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem;font-weight:700;color:var(--ink-3);letter-spacing:.02em}
+.tl .mn{float:right;font-size:.78rem;font-weight:800;color:var(--ink-3);background:var(--paper-2);padding:.1rem .5rem;border-radius:999px}
+.tl h3{margin-top:.4rem;font-size:1.15rem}
+.tl p{margin-top:.35rem;font-size:.95rem;color:var(--ink-2)}
+.note{margin-top:1.4rem;padding:1rem 1.2rem;border-radius:14px;background:rgba(114,198,254,.18);border:1px solid rgba(114,198,254,.5);font-weight:700;color:var(--navy)}
+.note span{display:block;font-weight:500;color:var(--ink-2);font-size:.95rem;margin-top:.2rem}
+
+/* ---------- speakers ---------- */
+.spk{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:640px){.spk{grid-template-columns:1fr}}
+.spk .tile{display:flex;gap:1.1rem;align-items:center;padding:1.2rem}
+.spk img{width:88px;height:88px;border-radius:50%;object-fit:cover;flex:none;background:var(--sky);box-shadow:0 0 0 4px var(--white),0 0 0 5px var(--line)}
+.spk .co{font-size:.8rem;font-weight:700;color:var(--ink-3)}
+.spk .role{font-size:.9rem;font-weight:700;color:var(--ink-2)}
+.spk .nm{font-size:1.35rem;font-weight:900;letter-spacing:.02em;color:var(--navy);line-height:1.25;margin-top:.1rem}
+.spk .nm small{font-size:.8rem;font-weight:700;color:var(--ink-3);margin-left:.3rem}
+.spk a{color:var(--ink-3);font-size:.86rem;font-weight:700;text-decoration:none}
+.spk a:hover{color:var(--orange)}
+.spk-p{margin-top:1.5rem;max-width:44em;color:var(--ink-2)}
+
+/* ---------- overview + final CTA ---------- */
+.ov{background:var(--navy);color:#fff;border-radius:var(--r-l);padding:clamp(1.6rem,4vw,3rem);display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:center;position:relative;overflow:hidden}
+.ov::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(40rem 20rem at 100% 100%,rgba(239,103,49,.28),transparent 60%)}
+@media (max-width:860px){.ov{grid-template-columns:1fr}}
+.ov>*{position:relative}
+.ov dl{display:grid;grid-template-columns:auto 1fr;gap:.55rem 1.2rem;font-size:1rem}
+.ov dt{color:rgba(255,255,255,.6);font-weight:700;white-space:nowrap}
+.ov dd{font-weight:700}
+.ov dd small{display:block;font-weight:500;color:rgba(255,255,255,.7);font-size:.9rem}
+.ov .h{font-size:1.45rem;font-weight:900;letter-spacing:-.01em;line-height:1.35}
+.ov .h em{font-style:normal;color:var(--sky)}
+.ov .side{text-align:center}
+.ov .side .btn{width:100%;max-width:340px;min-height:58px;font-size:1.08rem}
+.ov .side .small{color:rgba(255,255,255,.6);margin-top:.8rem}
+.ov .free{display:inline-block;margin-bottom:1rem;padding:.4rem 1rem;border-radius:999px;border:1.5px solid rgba(255,255,255,.35);font-weight:800;font-size:.9rem;letter-spacing:.04em}
+
+footer{padding:2.2rem 0 3rem;color:var(--ink-3);font-size:.86rem}
+footer .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center}
+footer img{height:18px;width:auto;opacity:.8}
+footer a{color:var(--ink-2);text-decoration:none}
+footer a:hover{color:var(--orange)}
+
+/* ---------- reveal (non-gestural, so CSS is fine) ---------- */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease-out),transform .8s var(--ease-out)}
+.rv.in-view{opacity:1;transform:none}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}
+
+/* sticky mobile CTA (translucent) */
+.mcta{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
+  background:rgba(251,250,248,.78);-webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);
+  border-top:1px solid rgba(1,19,42,.08);display:none;
+  transform:translateY(110%);transition:transform .45s var(--ease-out)}
+.mcta.show{transform:none}
+.mcta .btn{width:100%}
+@media (max-width:640px){.mcta{display:block}body{padding-bottom:84px}}
+
+/* ---------- accessibility prefs ---------- */
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important;animation:none!important;scroll-behavior:auto!important}
+  .rv{opacity:1;transform:none}
+  .tl li::before{transform:none}
+  .file{transform:none!important}
+  .file .sheen{display:none}
+}
+@media (prefers-reduced-transparency:reduce){
+  .nav,.mcta{background:var(--paper);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+@media (prefers-contrast:more){
+  .tile,.card,.checks li,.tl li{border-color:var(--ink-2)}
+  .nav{border-bottom:1px solid var(--ink-2)}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="ページの先頭へ">
+      <img src="assets/logo_daijobu.png" alt="DAIJOBU" width="287" height="56">
+      <span>Claude Code ウェビナー vol.2</span>
+    </a>
+    <div class="date">2026.9.7（月）12:00–13:00</div>
+    <a class="btn sm" href="https://daijobu-cc-0907.peatix.com/" target="_blank" rel="noopener">Peatixで申し込む</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="tag rv"><span>非エンジニア経営者向け</span></div>
+      <h1 class="rv d1">
+        <span class="sub">ランチタイムに学ぶ</span>
+        Claude Codeの<br><span class="hl">「スキル」入門</span>
+      </h1>
+      <span class="hook rv d2">名前は聞くけれど、説明はできない方へ</span>
+      <p class="lead rv d3">「スキル」という言葉、もう何度か目にしていませんか。Claude Codeの話をしていると必ず出てくるのに、「で、結局それは何なんですか」と、今さら聞ける場面が意外とありません。<br>今日はそこを、60分で終わりにします。</p>
+      <div class="cta rv d4">
+        <a class="btn" href="https://daijobu-cc-0907.peatix.com/" target="_blank" rel="noopener">
+          無料で申し込む
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5l5 5-5 5"/></svg>
+        </a>
+        <a class="btn ghost" href="#flow">当日の流れを見る</a>
+        <span class="small">申込は Peatix（外部サイト）で受け付けています。定員100名・先着。</span>
+      </div>
+    </div>
+
+    <div class="card infocard rv d2" id="infocard">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="dt" aria-label="2026年9月7日 月曜日 12時から13時">
+        <span class="y">2026.</span><span class="d">9.7</span><span class="w">月</span><span class="t">12:00–13:00</span>
+      </div>
+      <ul>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="M8 21h8"/></svg></i>オンライン（Zoom）</li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M6 8h12M6 16h12"/></svg></i>参加費 無料</li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></i>60分・ながら参加OK</li>
+        <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></i>見ているだけで大丈夫</li>
+      </ul>
+      <div class="gift"><b>申込特典</b><span>当日お見せするスキルの実物を、そのままお渡しします</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 心当たり ===== -->
+<section id="pain">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">こんな場面に心当たりは</span>
+      <h2>「なんとなく分かったこと」にして、過ごしていませんか</h2>
+    </div>
+    <div class="grid c4">
+      <div class="tile q rv d1"><span class="n">01</span><p>AIに毎回同じような長い説明をしてから、やっと仕事を頼んでいる</p></div>
+      <div class="tile q rv d2"><span class="n">02</span><p>うまくいったやり取りが、その場かぎりで消えていく</p></div>
+      <div class="tile q rv d3"><span class="n">03</span><p>「AIを使え」と言ってはいるが、使いこなせているのは社内の一部の人だけ</p></div>
+      <div class="tile q rv d4"><span class="n">04</span><p>ChatGPTは全社で入れたが、業務そのものは変わっていない</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 当日お見せするもの + 特典 ===== -->
+<section class="show" id="show">
+  <div class="wrap">
+    <div>
+      <div class="rv">
+        <span class="eyebrow">当日お見せするもの</span>
+        <h2 style="margin-top:.6rem">作り込んだデモではなく、<br>実際に動いているスキルを画面でそのまま</h2>
+        <p class="lead" style="margin-top:1rem">どれも、毎回ほぼ同じ手順でやっている仕事を、そのまま任せているものです。</p>
+      </div>
+      <div class="rv d2">
+        <div class="gifthead"><b>申込特典</b>当日お見せしたスキルを、実物のままお渡しします</div>
+        <h3>見て終わりにならないように</h3>
+        <p class="gift-p">当日お見せしたスキルのファイルそのものを、お申し込みいただいた方にお送りします。中身は数十行のテキストです。プログラムではないので、開けばそのまま読めます。何をどう指示しているかが分かるので、ご自身の業務に合わせて書き換えて、明日からそのままお使いいただけます。</p>
+        <p class="punch">「スキルとはこういうものです」と説明を聞くより、実物を1つ開いて読むほうが、はるかに早く腹落ちします。</p>
+      </div>
+    </div>
+    <div class="filewrap rv d1">
+      <div class="file" id="file" aria-label="スキルのファイル（SKILL.md）のイメージ" role="img">
+        <div class="bar"><i></i><i></i><i></i><span>SKILL.md</span></div>
+        <div class="body" aria-hidden="true">
+          <div class="ln k" style="--w:28%"></div>
+          <div class="ln h" style="--w:62%"></div>
+          <div class="ln" style="--w:84%"></div>
+          <div class="ln" style="--w:71%"></div>
+          <div class="ln gap"></div>
+          <div class="ln k" style="--w:22%"></div>
+          <div class="ln" style="--w:90%"></div>
+          <div class="ln" style="--w:66%"></div>
+          <div class="ln" style="--w:78%"></div>
+          <div class="ln gap"></div>
+          <div class="ln k" style="--w:34%"></div>
+          <div class="ln" style="--w:58%"></div>
+          <div class="ln" style="--w:80%"></div>
+          <div class="ln" style="--w:47%"></div>
+        </div>
+        <div class="foot"><span>数十行のテキスト</span><b>開けばそのまま読めます</b></div>
+        <div class="sheen" id="sheen"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 13時に、こうなっています ===== -->
+<section class="out" id="outcome">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">13時に、こうなっています</span>
+      <h2>持ち帰るのは、知識ではなく「説明できる状態」</h2>
+    </div>
+    <div class="grid c3">
+      <div class="tile rv d1"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span><p>スキルとは何か、何ができて何ができないかを、人に説明できる</p></div>
+      <div class="tile rv d2"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span><p>自社のどの作業をスキルにすればいいか、見当がつく</p></div>
+      <div class="tile rv d3"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span><p>「あの人にしかできない仕事」を社内に配るには何が要るか、道筋が見える</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 見ているだけで大丈夫 ===== -->
+<section class="reassure" id="easy">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">見ているだけで大丈夫です</span>
+      <h2 style="margin-top:.6rem">事前の準備も、手を動かす必要もありません</h2>
+      <p class="lead" style="margin-top:1rem">今回は実演をご覧いただく形式です。Claude Codeを触ったことがない方でも、冒頭から順にご覧いただければ追えます。</p>
+    </div>
+    <ul class="checks">
+      <li class="rv d1"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span>プログラミングの話はしません<em>名前に「Code」と入っていますが、コードは書きません</em></span></li>
+      <li class="rv d2"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span>カメラ・マイクは最初からオフ<em>お顔もお名前も、他の参加者には表示されません</em></span></li>
+      <li class="rv d3"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span>お食事をしながらの「ながら参加」で大歓迎<em>ランチタイムの60分、そのままご覧ください</em></span></li>
+      <li class="rv d4"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span>インストールも設定も不要<em>Zoomのリンクを開くだけで参加できます</em></span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 当日の流れ ===== -->
+<section id="flow">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">当日の流れ（60分）</span>
+      <h2>前置きは15分。あとは実物をそのままお見せします</h2>
+    </div>
+    <ol class="tl rv" id="tl">
+      <li><span class="mn">15分</span><div class="tm">12:00 – 12:15</div><h3>そもそもスキルとは何か</h3><p>言葉の正体を、はじめての方向けに。</p></li>
+      <li><span class="mn">30分</span><div class="tm">12:15 – 12:45</div><h3>実際に動いているスキルの実演</h3><p>手元で動いている実物を、画面でそのままお見せします。</p></li>
+      <li><span class="mn">15分</span><div class="tm">12:45 – 13:00</div><h3>質疑応答</h3><p>ZoomのQ&amp;Aから、時間の許す限りお答えします。</p></li>
+    </ol>
+    <div class="note rv d2">※ すでにClaude Codeをお使いの方・前回ご参加の方へ<span>前置きの説明は冒頭の15分だけです。あとは実物をそのままお見せします。</span></div>
+  </div>
+</section>
+
+<!-- ===== 登壇者 ===== -->
+<section id="speakers">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">登壇者</span>
+      <h2>DAIJOBU株式会社</h2>
+    </div>
+    <div class="spk">
+      <div class="tile rv d1">
+        <img src="assets/yamanaka.jpg" alt="山中 裕貴" width="88" height="88" loading="lazy">
+        <div>
+          <div class="role">代表</div>
+          <div class="nm">山中 裕貴<small>ふぇね</small></div>
+          <a href="https://x.com/0xfene" target="_blank" rel="noopener">@0xfene</a>
+        </div>
+      </div>
+      <div class="tile rv d2">
+        <img src="assets/ishii.jpg" alt="石井 雄大" width="88" height="88" loading="lazy">
+        <div>
+          <div class="role">事業責任者</div>
+          <div class="nm">石井 雄大</div>
+          <a href="https://x.com/AI_yudai" target="_blank" rel="noopener">@AI_yudai</a>
+        </div>
+      </div>
+    </div>
+    <p class="spk-p rv d3">非エンジニアの経営者・管理部門の方向けに、Claude Codeの法人研修を提供しています。「触ったことがない」ところから始めて、その日のうちに使えるようになる場に、何度も立ち会ってきました。</p>
+  </div>
+</section>
+
+<!-- ===== 開催概要 / CTA ===== -->
+<section id="overview">
+  <div class="wrap">
+    <div class="ov rv">
+      <div>
+        <span class="eyebrow" style="color:var(--sky)">開催概要</span>
+        <p class="h" style="margin:.6rem 0 1.4rem">「で、結局それは何なんですか」を、<br><em>60分で終わりにします。</em></p>
+        <dl>
+          <dt>日時</dt><dd>2026年9月7日（月）12:00–13:00</dd>
+          <dt>形式</dt><dd>オンライン（Zoom）<small>ウェビナー形式。ご質問はZoomのQ&amp;Aへお書きください。</small></dd>
+          <dt>参加費</dt><dd>無料</dd>
+          <dt>定員</dt><dd>100名（先着）</dd>
+          <dt>登壇</dt><dd>DAIJOBU株式会社<small>代表 山中 裕貴（ふぇね／@0xfene）<br>事業責任者 石井 雄大（@AI_yudai）</small></dd>
+          <dt>主催</dt><dd>DAIJOBU株式会社</dd>
+        </dl>
+      </div>
+      <div class="side">
+        <span class="free">参加無料・見るだけOK</span>
+        <a class="btn" href="https://daijobu-cc-0907.peatix.com/" target="_blank" rel="noopener">
+          Peatixで申し込む
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5l5 5-5 5"/></svg>
+        </a>
+        <p class="small">お申し込みいただいた方には、当日お見せするスキルの実物をお渡しします。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/logo_daijobu.png" alt="DAIJOBU株式会社" width="287" height="56">
+    <div>主催：DAIJOBU株式会社 ／ <a href="https://daijobu-cc-0907.peatix.com/" target="_blank" rel="noopener">イベントページ（Peatix）</a></div>
+  </div>
+</footer>
+
+<div class="mcta" id="mcta">
+  <a class="btn" href="https://daijobu-cc-0907.peatix.com/" target="_blank" rel="noopener">無料で申し込む（Peatix）</a>
+</div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* --- reveal on scroll (one-shot) --- */
+  const rvs = new Set(document.querySelectorAll('.rv'));
+  const show = (el) => { el.classList.add('in-view'); rvs.delete(el); io.unobserve(el); };
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => { if (e.isIntersecting || e.boundingClientRect.bottom < 0) show(e.target); });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  rvs.forEach(el => io.observe(el));
+  // A fast scroll (anchor jump, End key, flick) can skip past elements between observer checks —
+  // sweep anything already above the fold so nothing is left invisible.
+  let sweep = 0;
+  const sweepNow = () => { sweep = 0; const lim = innerHeight * 0.96;
+    rvs.forEach(el => { if (el.getBoundingClientRect().top < lim) show(el); }); };
+  addEventListener('scroll', () => { if (!sweep) sweep = requestAnimationFrame(sweepNow); }, { passive: true });
+
+  /* --- nav scroll-edge effect --- */
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('is-stuck', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* --- mobile sticky CTA: show after the hero CTA leaves the viewport --- */
+  const mcta = document.getElementById('mcta');
+  const heroCta = document.querySelector('.hero .cta');
+  new IntersectionObserver(([e]) => mcta.classList.toggle('show', !e.isIntersecting && e.boundingClientRect.top < 0))
+    .observe(heroCta);
+
+  /* --- buttons: feedback on pointer-down, cancel on drag-away --- */
+  document.querySelectorAll('.btn').forEach(b => {
+    b.addEventListener('pointerdown', () => b.classList.add('is-pressed'));
+    const up = () => b.classList.remove('is-pressed');
+    b.addEventListener('pointerup', up); b.addEventListener('pointercancel', up); b.addEventListener('pointerleave', up);
+  });
+
+  /* --- SKILL.md card: tracks the pointer 1:1 while hovering, springs home when it leaves.
+         Two independent springs (rx, ry), critically damped (no overshoot), driven by rAF,
+         always animating from the current (presentation) value so re-entry never jumps. --- */
+  const file = document.getElementById('file');
+  const sheen = document.getElementById('sheen');
+  if (file && !reduce && matchMedia('(hover: hover)').matches) {
+    const spring = (k = 170, c = 26) => ({ x: 0, v: 0, target: 0, k, c });   // damping ratio ≈ 1.0
+    const rx = spring(), ry = spring(), sx = spring(120, 22);
+    sx.x = -120; sx.target = -120;
+    let raf = 0, last = 0;
+    const step = (s, dt) => {
+      const a = -s.k * (s.x - s.target) - s.c * s.v;
+      s.v += a * dt; s.x += s.v * dt;
+    };
+    const tick = (t) => {
+      const dt = Math.min(0.032, (t - last) / 1000 || 0.016); last = t;
+      step(rx, dt); step(ry, dt); step(sx, dt);
+      file.style.transform = `rotateX(${ry.x.toFixed(3)}deg) rotateY(${rx.x.toFixed(3)}deg)`;
+      sheen.style.setProperty('--sx', sx.x.toFixed(2) + '%');
+      const still = Math.abs(rx.v) + Math.abs(ry.v) + Math.abs(sx.v) < 0.02
+                 && Math.abs(rx.x - rx.target) + Math.abs(ry.x - ry.target) + Math.abs(sx.x - sx.target) < 0.02;
+      raf = still ? 0 : requestAnimationFrame(tick);
+    };
+    const kick = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } };
+    file.addEventListener('pointermove', (e) => {
+      const r = file.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+      rx.target = px * 14; ry.target = -py * 12; sx.target = px * 160;
+      kick();
+    });
+    file.addEventListener('pointerleave', () => { rx.target = 0; ry.target = 0; sx.target = -120; kick(); });
+  }
+})();
+</script>
+</body>
+</html>
